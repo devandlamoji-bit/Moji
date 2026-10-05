@@ -1,0 +1,4 @@
+package com.bakehub.entity;
+import jakarta.persistence.*; import lombok.*; import java.time.LocalDate; import java.time.LocalDateTime;
+@Entity @Table(name="orders") @Getter @Setter @NoArgsConstructor
+public class Order { @Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id; @Column(nullable=false) private String customerName; @Column(nullable=false) private String phone; @Column(nullable=false,length=500) private String address; @Column(nullable=false) private LocalDate deliveryDate; @Column(nullable=false) private Integer quantity; @Column(nullable=false) private String customization; @Column(nullable=false) private Double totalAmount; @Enumerated(EnumType.STRING) @Column(nullable=false) private OrderStatus status=OrderStatus.PENDING; private LocalDateTime createdAt=LocalDateTime.now(); @ManyToOne(optional=false) private Product product; }

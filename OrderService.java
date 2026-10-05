@@ -1,0 +1,6 @@
+package com.bakehub.service;
+import com.bakehub.dto.OrderRequest; import com.bakehub.entity.*; import com.bakehub.repository.*; import org.springframework.stereotype.Service; import java.util.*;
+@Service public class OrderService { private final OrderRepository orders; private final ProductRepository products; public OrderService(OrderRepository o,ProductRepository p){orders=o;products=p;}
+ public List<Product> products(){return products.findAll();} public List<Order> orders(){return orders.findAllByOrderByCreatedAtDesc();} public Order get(Long id){return orders.findById(id).orElseThrow(()->new NoSuchElementException("Order not found: "+id));}
+ public Order create(OrderRequest r){Product p=products.findById(r.productId()).orElseThrow(()->new NoSuchElementException("Product not found: "+r.productId())); Order o=new Order(); o.setProduct(p); o.setCustomerName(r.customerName());o.setPhone(r.phone());o.setAddress(r.address());o.setDeliveryDate(r.deliveryDate());o.setQuantity(r.quantity());o.setCustomization(r.customization());o.setTotalAmount(p.getPrice()*r.quantity());return orders.save(o);}
+ public Order status(Long id,OrderStatus s){Order o=get(id);o.setStatus(s);return orders.save(o);} public Product add(Product p){return products.save(p);} }
